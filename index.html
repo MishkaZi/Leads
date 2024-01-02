@@ -12,6 +12,34 @@
 
 	<link rel="stylesheet" href="public/assets/css/style.css">
 
+	<style>
+		.popup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #fff;
+			padding: 20px;
+			border-radius: 5px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+			z-index: 9999;
+			display: none;
+			/* Initially hidden */
+		}
+
+		.popup-close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+
+		#form-message-warning {
+			color: red;
+			/* Styling for error messages */
+		}
+	</style>
+
 </head>
 
 <body>
@@ -30,16 +58,24 @@
 								<div class="contact-wrap w-100 p-md-5 p-4">
 									<h3 class="mb-4">Get in touch with us</h3>
 									<div id="form-message-warning" class="mb-4"></div>
-									<div id="form-message-success" class="mb-4">
+									<div id="form-message-success" class="mb-4 popup">
 										Your message was sent, thank you!
+										<span class="popup-close">&times;</span>
 									</div>
 									<form method="POST" id="contactForm" name="contactForm" class="contactForm">
 										<div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
-													<label class="label" for="name">Full Name</label>
-													<input type="text" class="form-control" name="name" id="name"
-														placeholder="Name">
+													<label class="label" for="firstName">First Name</label>
+													<input type="text" class="form-control" name="firstName"
+														id="firstName" placeholder="First Name">
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="label" for="lastName">Last Name</label>
+													<input type="text" class="form-control" name="lastName"
+														id="lastName" placeholder="Last Name">
 												</div>
 											</div>
 											<div class="col-md-6">
@@ -49,18 +85,18 @@
 														placeholder="Email">
 												</div>
 											</div>
-											<div class="col-md-12">
+											<div class="col-md-6">
 												<div class="form-group">
-													<label class="label" for="subject">Subject</label>
-													<input type="text" class="form-control" name="subject" id="subject"
-														placeholder="Subject">
+													<label class="label" for="phoneNumber">Phone Number</label>
+													<input type="tel" class="form-control" name="phoneNumber"
+														id="phoneNumber" placeholder="Phone Number">
 												</div>
 											</div>
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="label" for="#">Message</label>
-													<textarea name="message" class="form-control" id="message" cols="30"
-														rows="4" placeholder="Message"></textarea>
+													<label class="label" for="note">Note</label>
+													<textarea name="note" class="form-control" id="note" cols="30"
+														rows="4" placeholder="Note"></textarea>
 												</div>
 											</div>
 											<div class="col-md-12">
@@ -85,6 +121,13 @@
 	<script src="public/assets/js/bootstrap.min.js"></script>
 	<script src="public/assets/js/jquery.validate.min.js"></script>
 	<script src="public/assets/js/main.js"></script>
+
+	<script>
+		// Close popup when close button is clicked
+		document.querySelector('.popup-close').addEventListener('click', function () {
+			document.getElementById('form-message-success').style.display = 'none';
+		});
+	</script>
 
 </body>
 

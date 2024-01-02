@@ -1,85 +1,90 @@
-(function($) {
+(function ($) {
 
-	"use strict";
+    "use strict";
+    var userData = {
+        ip: '',
+        country: ''
+    };
 
+    // Function to fetch user IP and country
+    function fetchUserIPAndCountry() {
+        $.getJSON('http://ip-api.com/json', function (data) {
+            userData.ip = data.query;
+            userData.country = data.country;
+        }).fail(function () {
+            console.log("Error fetching IP and country information.");
+        });
+    }
 
-  // Form
-	var contactForm = function() {
-		if ($('#contactForm').length > 0 ) {
-			$( "#contactForm" ).validate( {
-				rules: {
-					name: "required",
-					subject: "required",
-					email: {
-						required: true,
-						email: true
-					},
-					message: {
-						required: true,
-						minlength: 5
-					}
-				},
-				messages: {
-					name: "Please enter your name",
-					subject: "Please enter your subject",
-					email: "Please enter a valid email address",
-					message: "Please enter a message"
-				},
-				/* submit via ajax */
-				
-				submitHandler: function(form) {		
-					var $submit = $('.submitting'),
-						waitText = 'Submitting...';
+    // Call the function on page load
+    fetchUserIPAndCountry();
 
-					$.ajax({   	
-				      type: "POST",
-				      url: "public/assets/php/sendEmail.php",
-				      data: $(form).serialize(),
+    // Form
+    var contactForm = function () {
+        if ($('#contactForm').length > 0) {
+            $("#contactForm").validate({
+                rules: {
+                    firstName: "required",
+                    lastName: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    phoneNumber: {
+                        required: true,
+                        digits: true
+                    },
+                    note: "required"
+                },
+                messages: {
+                    firstName: "Please enter your first name",
+                    lastName: "Please enter your last name",
+                    email: "Please enter a valid email address",
+                    phoneNumber: "Please enter your phone number",
+                    note: "Please enter a note"
+                },
 
-				      beforeSend: function() { 
-				      	$submit.css('display', 'block').text(waitText);
-				      },
-				      success: function(msg) {
-		               if (msg == 'OK') {
-		               	$('#form-message-warning').hide();
-				            setTimeout(function(){
-		               		$('#contactForm').fadeIn();
-		               	}, 1000);
-				            setTimeout(function(){
-				               $('#form-message-success').fadeIn();   
-		               	}, 1400);
+                submitHandler: function (form, event) {
+                    event.preventDefault();
+                    var formData = $(form).serializeArray();
+                    formData.push({ name: 'ip', value: userData.ip });
+                    formData.push({ name: 'country', value: userData.country });
+                    formData.push({ name: 'url', value: window.location.href });
 
-		               	setTimeout(function(){
-				               $('#form-message-success').fadeOut();   
-		               	}, 8000);
+                    var urlParams = new URLSearchParams(window.location.search);
+                    if (urlParams.has('sub_1')) {
+                        formData.push({ name: 'sub_1', value: urlParams.get('sub_1') });
+                    }
 
-		               	setTimeout(function(){
-				               $submit.css('display', 'none').text(waitText);  
-		               	}, 1400);
+                    $.ajax({
+                        type: "POST",
+                        url: "src/leads.php",
+                        data: formData,
+                        success: function (response) {
+                            if (response && response.status === 'success') {
+                                $('#form-message-warning').hide(); // Hide the error message
+                                $('#form-message-success').fadeIn();
+                                setTimeout(function () {
+                                    $('#form-message-success').fadeOut();
+                                }, 8000);
+                            } else if (response && response.status === 'error') {
+                                $('#form-message-warning').html(response.message).fadeIn();
+                            }
+                        },
+                        error: function () {
+                            $('#form-message-warning').html("Something went wrong. Please try again.").fadeIn();
+                        }
+                    });
+                }
+            });
+        }
+    };
+    contactForm();
 
-		               	setTimeout(function(){
-		               		$( '#contactForm' ).each(function(){
-											    this.reset();
-											});
-		               	}, 1400);
-			               
-			            } else {
-			               $('#form-message-warning').html(msg);
-				            $('#form-message-warning').fadeIn();
-				            $submit.css('display', 'none');
-			            }
-				      },
-				      error: function() {
-				      	$('#form-message-warning').html("Something went wrong. Please try again.");
-				         $('#form-message-warning').fadeIn();
-				         $submit.css('display', 'none');
-				      }
-			      });    		
-		  		} // end submitHandler
-
-			});
-		}
-	};
-	contactForm();
+    // Close popup and clear form inputs
+    document.querySelector('.popup-close').addEventListener('click', function() {
+        document.getElementById('form-message-success').style.display = 'none';
+        $('#contactForm').trigger("reset"); // Clear form inputs
+    });
 
 })(jQuery);
