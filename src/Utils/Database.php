@@ -14,10 +14,10 @@ class Database {
 
     public static function getInstance() {
         if (self::$instance == null) {
-            $host = $_ENV['DB_HOST'];
-            $dbname = $_ENV['DB_NAME'];
-            $username = $_ENV['DB_USER'];
-            $password = $_ENV['DB_PASS'];
+            $host = getenv('DB_HOST');
+            $dbname = getenv('DB_NAME');
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASS');
 
             self::$instance = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION

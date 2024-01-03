@@ -1,5 +1,4 @@
 (function ($) {
-
 	"use strict";
 	var userData = {
 		ip: '',
@@ -15,9 +14,6 @@
 			console.log("Error fetching IP and country information.");
 		});
 	}
-
-
-
 	// Call the function on page load
 	fetchUserIPAndCountry();
 
