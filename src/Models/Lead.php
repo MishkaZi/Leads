@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'Utils/Database.php';
+require_once 'src/Utils/Database.php';
 
 class Lead
 {
@@ -45,18 +45,26 @@ class Lead
     }
 
     // Function to get filtered leads
-    public function getFilteredLeads($filter)
-    {
+    public function getFilteredLeads($filter) {
         $db = Database::getInstance();
-        $sql = "SELECT * FROM leads WHERE ";
+        $sql = "SELECT * FROM leads WHERE 1=1 ";  // Start with a true condition
 
-        // Add conditional clauses based on the filter type
-        // Example for 'country' filter
-        if ($filter['type'] === 'country') {
-            $sql .= "country = ?";
-            $values = [$filter['value']];
+        $values = [];
+
+        if (!empty($filter['country'])) {
+            $sql .= " AND country = ?";
+            $values[] = $filter['country'];
         }
-        // Add other conditions for 'called' and 'created today' filters
+
+        if (isset($filter['called'])) {
+            $sql .= " AND called = ?";
+            $values[] = $filter['called'];
+        }
+
+        if (!empty($filter['created_at'])) {
+            $sql .= " AND DATE(created_at) = ?";
+            $values[] = $filter['created_at'];
+        }
 
         $stmt = $db->prepare($sql);
         $stmt->execute($values);

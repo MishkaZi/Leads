@@ -1,7 +1,7 @@
 <?php
 // src/Controllers/LeadController.php
 
-require_once 'Models/Lead.php';
+require_once 'src/Models/Lead.php';
 
 class LeadController {
     private $leadModel;
