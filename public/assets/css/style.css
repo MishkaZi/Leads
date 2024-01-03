@@ -4,6 +4,9 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+ a.btn.btn-sm.btn-success, a.btn.btn-sm.btn-danger {
+  min-width: 90px;
+}
 
 .popup {
   position: fixed;
@@ -11782,7 +11785,7 @@ h5,
 }
 
 .ftco-section {
-  padding: 7em 0;
+  padding: 20px 0;
 }
 
 .ftco-no-pt {
