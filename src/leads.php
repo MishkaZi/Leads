@@ -1,7 +1,7 @@
 <?php
 // src/leads.php
 
-require_once 'src/Controllers/LeadController.php';
+require_once 'Controllers/LeadController.php';
 
 // Instantiate LeadController and handle incoming requests
 $leadController = new LeadController();

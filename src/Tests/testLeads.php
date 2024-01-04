@@ -1,5 +1,5 @@
 <?php
-require_once 'src/Controllers/LeadController.php';
+require_once __DIR__ . '/../Controllers/LeadController.php';
 
 // Instantiate the controller
 $leadController = new LeadController();

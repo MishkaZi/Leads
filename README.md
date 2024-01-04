@@ -2,6 +2,8 @@
 
 ## Description
 A landing page for the company that saves the clients details in order to call them back. 
+I used some free template for frontend with contact form and extended it to desired functionality.
+Simple (only to show to idea) hardcored username and password check in backend.
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/MishkaZi/Leads.git` (or use provided files)

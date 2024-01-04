@@ -1,11 +1,17 @@
 <?php
+/**
+ * This file handles the login functionality.
+ * It checks the submitted username and password against hardcoded credentials.
+ * If the credentials match, it sets the 'logged_in' session variable to true and redirects to the backoffice.php page.
+ * If the credentials do not match, it displays an error message.
+ */
+
 session_start();
 
 // Hardcoded credentials (change these for production)
 $username = 'admin';
 $password = '1234';
 
-// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST['username'] === $username && $_POST['password'] === $password) {
         $_SESSION['logged_in'] = true;
